@@ -7,6 +7,7 @@ mod handler;
 
 #[tokio::main]
 async fn main() {
+    println!("change from remote repo");
     /*let framework = StandardFramework::new()
         .configure(|c| c.prefix("*")) // set bot prefix to *
         .group(&GENERAL_GROUP);*/
