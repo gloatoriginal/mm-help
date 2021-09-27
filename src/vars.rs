@@ -23,7 +23,7 @@ impl Vars {
             .query_drop(
                 format!("INSERT INTO vars(server_id, start_command) VALUES('{}', '.')", guild_id)
             ) {
-                Ok(ok) => println!("table created successfully"),
+                Ok(ok) => println!("var row created sucessfully for {}", guild_id),
                 Err(err) => println!("Table had issues being created: {}", err),
             }
         Vars { start_command: ".".to_string() }

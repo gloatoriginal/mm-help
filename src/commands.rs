@@ -13,7 +13,14 @@ impl Commands {
         vec!["commands".to_string(), "addcomm".to_string(), "remcomm".to_string(), "editcomm".to_string()]
     }
     fn valid_hard_command(msg: &String) -> bool {
-        Self::get_hard_commands().contains(msg)
+        for command in Self::get_hard_commands() {
+            match command.eq(msg) {
+                true => return true,
+                _ => continue,
+            }
+        }
+        //Self::get_hard_commands().contains(msg)
+        false
     }
     fn hard_coded_response(msg: &String, guild_id: &String) -> String {
         let response = match msg.as_str() {
@@ -25,7 +32,7 @@ impl Commands {
                     temp_res.push_str("\n\"");
                     temp_res.push_str(&command.command_name); temp_res.push_str("\"\t\"");
                     temp_res.push_str(&command.command_response); temp_res.push_str("\"\t\"");
-                    temp_res.push_str(&command.command_description);
+                    temp_res.push_str(&command.command_description); temp_res.push_str("\"");
                 }
                 temp_res
             },
@@ -46,17 +53,18 @@ impl Commands {
                         command_response: "".to_string(),
                         command_description: "".to_string(),
                     };
+        let return_tuple: (dbhandles::SoftCommands, bool);
         for soft_command in soft_commands_list {
             match soft_command.command_name.eq(msg) {
                 true => {
                     return (soft_command, true);
                 },
-                false => {
-                    return (empty_soft_commands, false);
+                _ => {
+                    continue
                 },
             }
         }
-        (empty_soft_commands, false)
+        return (empty_soft_commands, false);
     }
 
 
