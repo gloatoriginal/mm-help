@@ -4,14 +4,11 @@ use serenity::{
 use std::env;
 mod commands;
 mod handler;
-
+pub mod vars;
 
 #[tokio::main]
 async fn main() {
-    println!("change from remote repo");
-    /*let framework = StandardFramework::new()
-        .configure(|c| c.prefix("*")); // set bot prefix to *
-*/
+
     // Login with a bot token from the environment
 	let token = env::var("TOKE").expect("Forgot to add token to env vars");
     let mut client = Client::builder(&token)
