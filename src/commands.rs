@@ -1,11 +1,11 @@
+mod dbhandles;
 pub struct Commands {
     //commands: Vec<String>,
     //message: String,
-    guild_id: String,
     pub response: String,
     pub is_valid: bool,
 }
-mod dbhandles;
+
 
 impl Commands {
     //hard commands set functions these are commands that are hard coded
@@ -26,13 +26,11 @@ impl Commands {
         let response = match msg.as_str() {
             "commands" => {
                 let mut temp_res: String = 
-                    "\n\"Command name\"\t\"Command response\"\t\"Command Description\"\n".to_owned(); 
-                temp_res.push_str("\"commands\"\t\"this response\"\t\"List bot and user defined commands\"");
+                    "Command name\tCommand response\n".to_owned(); 
+                temp_res.push_str("commands\tthis response");
                 for command in Self::get_soft_commands(&guild_id) {
-                    temp_res.push_str("\n\"");
-                    temp_res.push_str(&command.command_name); temp_res.push_str("\"\t\"");
-                    temp_res.push_str(&command.command_response); temp_res.push_str("\"\t\"");
-                    temp_res.push_str(&command.command_description); temp_res.push_str("\"");
+                    temp_res.push_str(&command.command_name); temp_res.push_str("\t");
+                    temp_res.push_str(&command.command_response); 
                 }
                 temp_res
             },
@@ -51,9 +49,7 @@ impl Commands {
         let empty_soft_commands = dbhandles::SoftCommands {
                         command_name: "".to_string(),
                         command_response: "".to_string(),
-                        command_description: "".to_string(),
                     };
-        let return_tuple: (dbhandles::SoftCommands, bool);
         for soft_command in soft_commands_list {
             match soft_command.command_name.eq(msg) {
                 true => {
@@ -88,7 +84,6 @@ impl Commands {
         Commands {
             //commands: Self::get_commands(),
             //message: msg,
-            guild_id: guild_id,
             response: response,
             is_valid: is_valid
         }
