@@ -12,23 +12,16 @@ impl Commands {
     fn get_hard_commands() -> Vec<String> {
         vec!["commands".to_string(), "addcomm".to_string(), "remcomm".to_string(), "editcomm".to_string()]
     }
-    fn valid_hard_command(msg: &String) -> bool {
-        for command in Self::get_hard_commands() {
-            match command.eq(msg) {
-                true => return true,
-                _ => continue,
-            }
-        }
-        //Self::get_hard_commands().contains(msg)
-        false
+    fn valid_hard_command(msg: &str) -> bool {
+        Self::get_hard_commands().iter().any(|command| command.eq(msg))
     }
-    fn hard_coded_response(msg: &String, guild_id: &String) -> String {
-        let response = match msg.as_str() {
+    fn hard_coded_response(msg: &str, guild_id: &str) -> String {
+        let response = match msg {
             "commands" => {
                 let mut temp_res: String = 
                     "Command name\tCommand response\n".to_owned(); 
                 temp_res.push_str("commands\tthis response\n");
-                for command in Self::get_soft_commands(&guild_id) {
+                for command in &Self::get_soft_commands(&guild_id) {
                     temp_res.push_str(&command.command_name); temp_res.push_str("\t");
                     temp_res.push_str(&command.command_response); temp_res.push_str("\n");
                 }
@@ -39,12 +32,12 @@ impl Commands {
         response.to_string()
     }
     //soft commands set functions these are commands created by the user
-    fn get_soft_commands(guild_id: &String) -> Vec<dbhandles::SoftCommands> {
+    fn get_soft_commands(guild_id: &str) -> Vec<dbhandles::SoftCommands> {
         let soft_commands_list: Vec<dbhandles::SoftCommands> = dbhandles::
                                                 SoftCommands::get_soft_commands_sql(&guild_id);
         soft_commands_list
     }
-    fn valid_soft_command(msg: &String, guild_id: &String) -> (dbhandles::SoftCommands, bool) {
+    fn valid_soft_command(msg: &str, guild_id: &str) -> (dbhandles::SoftCommands, bool) {
         let soft_commands_list = Self::get_soft_commands(&guild_id);
         let empty_soft_commands = dbhandles::SoftCommands {
                         command_name: "".to_string(),
@@ -60,7 +53,7 @@ impl Commands {
 
 
     //create a new struct to hold commands    
-    pub fn new(msg: String, guild_id: String) -> Commands {
+    pub fn new(msg: &str, guild_id: &str) -> Commands {
         let is_valid: bool;
         let response = if Self::valid_hard_command(&msg) {
             is_valid = true;
@@ -75,7 +68,6 @@ impl Commands {
                 "".to_string()
             } 
         };
-        //let response: String; 
         Commands {
             response: response,
             is_valid: is_valid
