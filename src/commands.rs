@@ -27,10 +27,10 @@ impl Commands {
             "commands" => {
                 let mut temp_res: String = 
                     "Command name\tCommand response\n".to_owned(); 
-                temp_res.push_str("commands\tthis response");
+                temp_res.push_str("commands\tthis response\n");
                 for command in Self::get_soft_commands(&guild_id) {
                     temp_res.push_str(&command.command_name); temp_res.push_str("\t");
-                    temp_res.push_str(&command.command_response); 
+                    temp_res.push_str(&command.command_response); temp_res.push_str("\n");
                 }
                 temp_res
             },
@@ -51,14 +51,9 @@ impl Commands {
                         command_response: "".to_string(),
                     };
         for soft_command in soft_commands_list {
-            match soft_command.command_name.eq(msg) {
-                true => {
-                    return (soft_command, true);
-                },
-                _ => {
-                    continue
-                },
-            }
+            if soft_command.command_name.eq(msg) {
+                return (soft_command, true);
+            } 
         }
         return (empty_soft_commands, false);
     }
@@ -82,8 +77,6 @@ impl Commands {
         };
         //let response: String; 
         Commands {
-            //commands: Self::get_commands(),
-            //message: msg,
             response: response,
             is_valid: is_valid
         }
